@@ -296,8 +296,10 @@
             const payPerLiter = settlementPrice - rule.discLiter;
             const actualCashPay = payLiters * payPerLiter; 
 
-            const ptsBase = state.fuel === 'super' ? 1.0 : 0.5;
-            const ptsTotal = payLiters * ptsBase * rule.ptsTimes; 
+            // 積分計算修正：
+            // 規則中 rule.ptsTimes 已包含基礎積分倍率（白金1/黃金0.5）。
+            // 修正前重複乘以 ptsBase 導致黃金油積分多減半一次。
+            const ptsTotal = payLiters * rule.ptsTimes; 
             const extraLitersFromPts = ptsTotal / gasPrices['regular'];
 
             setSafeText('res-meter', `$${nominalAmount.toFixed(2)}`);
