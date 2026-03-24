@@ -13,7 +13,6 @@
         .caltex-bg-red { background-color: #ed1c24; }
         .border-caltex-blue { border-color: #005696; }
         
-        /* 官方導航線條裝飾 */
         .brand-line { height: 4px; background: linear-gradient(90deg, #ed1c24 0%, #ed1c24 50%, #005696 50%, #005696 100%); }
         
         .card-shadow { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); }
@@ -22,10 +21,8 @@
         
         .loading-overlay { position: fixed; inset: 0; background: white; display: flex; align-items: center; justify-content: center; z-index: 50; }
         
-        /* 模擬官網按鈕質感 */
         .btn-official { transition: all 0.2s ease-in-out; border-radius: 4px; }
         
-        /* 結果面板 */
         .result-panel { background-color: #ffffff; border-top: 4px solid #005696; }
     </style>
 </head>
@@ -39,7 +36,6 @@
     </div>
 
     <div class="max-w-md mx-auto bg-white overflow-hidden card-shadow rounded-lg">
-        <!-- 官網風格頭部 (含官方 Logo) -->
         <div class="bg-white px-5 py-4 flex justify-between items-center">
             <div class="flex items-center">
                 <img src="https://www.caltex.com/content/dam/caltex/common/icon/corporate/caltex_logo.png" 
@@ -48,13 +44,12 @@
                      onerror="this.onerror=null; this.outerHTML='<span class=\'text-xl font-bold italic caltex-blue\'>CALTEX</span>';">
             </div>
             <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest text-right">
-                Smart<br>Calculator
+                @Addoilpro<br>Calculator
             </div>
         </div>
         <div class="brand-line w-full"></div>
 
         <div class="p-6 space-y-6">
-            <!-- 數據同步狀態 -->
             <div class="flex items-center justify-center">
                 <span id="sync-status" class="text-[9px] bg-gray-100 text-gray-500 px-2 py-1 rounded-full font-mono italic">正在連接雲端數據庫...</span>
             </div>
@@ -134,8 +129,12 @@
                         <span class="font-bold text-gray-800" id="res-meter">$0.00</span>
                     </div>
                     <div class="flex justify-between text-xs">
-                        <span class="text-gray-500">總獲油量 (Total Liters):</span>
-                        <span class="font-bold caltex-blue" id="res-total-liters">0.000 L</span>
+                        <span class="text-gray-500 font-semibold">總獲油量 (Total Liters):</span>
+                        <span class="font-black caltex-blue" id="res-total-liters">0.000 L</span>
+                    </div>
+                    <div class="flex justify-between text-[11px] text-gray-500">
+                        <span>實付金額購得 (Paid Liters):</span>
+                        <span class="font-medium" id="res-paid-liters">0.000 L</span>
                     </div>
                     <div class="flex justify-between text-[11px] text-gray-400">
                         <span>贈送油量 (<span id="res-coupon-qty">0</span> 張券):</span>
@@ -154,9 +153,8 @@
         </div>
     </div>
 
-    <!-- 頁腳裝飾 -->
     <div class="max-w-md mx-auto mt-6 text-center">
-        <p class="text-[10px] text-gray-400 uppercase tracking-widest font-bold">© Caltex Hong Kong - Smart Calculator Tool</p>
+        <p class="text-[10px] text-gray-400 uppercase tracking-widest font-bold">© Caltex Hong Kong - @Addoilpro Calculator</p>
     </div>
 
     <script>
@@ -296,15 +294,13 @@
             const payPerLiter = settlementPrice - rule.discLiter;
             const actualCashPay = payLiters * payPerLiter; 
 
-            // 積分計算修正：
-            // 規則中 rule.ptsTimes 已包含基礎積分倍率（白金1/黃金0.5）。
-            // 修正前重複乘以 ptsBase 導致黃金油積分多減半一次。
             const ptsTotal = payLiters * rule.ptsTimes; 
             const extraLitersFromPts = ptsTotal / gasPrices['regular'];
 
             setSafeText('res-meter', `$${nominalAmount.toFixed(2)}`);
             setSafeText('res-actual-pay', `$${actualCashPay.toFixed(2)}`);
             setSafeText('res-free-liters', `${freeLiters.toFixed(3)} L`);
+            setSafeText('res-paid-liters', `${payLiters.toFixed(3)} L`);
             setSafeText('res-total-liters', `${totalLiters.toFixed(3)} L`);
             setSafeText('res-direct', `$${totalLiters > 0 ? (actualCashPay / totalLiters).toFixed(3) : "0.000"}`);
             setSafeText('res-points', `$${(totalLiters + extraLitersFromPts) > 0 ? (actualCashPay / (totalLiters + extraLitersFromPts)).toFixed(3) : "0.000"}`);
